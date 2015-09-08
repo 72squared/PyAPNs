@@ -88,6 +88,8 @@ SENT_BUFFER_QTY = 100000
 WAIT_WRITE_TIMEOUT_SEC = 10
 WAIT_READ_TIMEOUT_SEC = 10
 WRITE_RETRY = 3
+SOCKET_ERR_RETRY_WAIT_DEFAULT = 10
+
 
 ER_STATUS = 'status'
 ER_IDENTIFER = 'identifier'
@@ -534,7 +536,7 @@ class GatewayConnection(APNsConnection):
                         self._sent_notifications.append(dict({'id': identifier, 'message': message}))
                     break
                 except socket_error as e:
-                    delay = 10 + (i * 2)
+                    delay = SOCKET_ERR_RETRY_WAIT_DEFAULT + (i * 2)
                     _logger.exception("sending notification with id:" + str(identifier) + 
                                  " to APNS failed: " + str(type(e)) + ": " + str(e) + 
                                  " in " + str(i+1) + "th attempt, will wait " + str(delay) + " secs for next action")
